@@ -19,9 +19,10 @@ class MainActivity : ComponentActivity() {
         for (i in 0 .. 5) { notes.add(Note(i, "Title$i", "Content$i")) }
 
         setContent {
-            MainCompose(notes) {
-                Timber.d("Clicked note $it")
-            }
+            MainCompose(notes,
+                { Timber.d("Clicked note $it") },
+                { Timber.d("Create note") }
+            )
         }
     }
 }
