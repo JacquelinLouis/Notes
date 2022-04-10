@@ -9,7 +9,9 @@ import timber.log.Timber
 import timber.log.Timber.Forest.plant
 
 /**
- * Follow https://developer.android.com/jetpack/compose/mental-model to implement a note application.
+ * Useful tutorials used to develop this application:
+ * https://developer.android.com/jetpack/compose/mental-model
+ * https://developer.android.com/codelabs/jetpack-compose-navigation
  */
 class MainActivity : ComponentActivity() {
 
@@ -23,10 +25,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            MainCompose(listViewModel,
-                { Timber.d("Clicked note $it") },
-                { listViewModel.createNote() }
-            )
+            MainCompose()
         }
     }
 }

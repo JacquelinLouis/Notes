@@ -12,24 +12,27 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jac.notes.Note
 import com.jac.notes.ui.theme.NotesTheme
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ListCompose(MainComposePreviewParameterProvider().values.first())
-}
 
 private class MainComposePreviewParameterProvider: PreviewParameterProvider<List<Note>> {
     override val values = sequenceOf(mutableListOf<Note>().apply {
         for (i in 0 .. 5) { add(Note(i, "Title$i", "Content$i")) }
     })
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    ListCompose(MainComposePreviewParameterProvider().values.first())
 }
 
 @Composable
@@ -62,4 +65,12 @@ fun ListCompose(@PreviewParameter(MainComposePreviewParameterProvider::class) no
             }
         }
     }
+}
+
+@Composable
+fun ListCompose(listViewModel: ListViewModel = viewModel(),
+                onNoteItemClicked: (Int) -> Unit = {},
+                onCreateClicked: () -> Unit = {}) {
+    val notes by listViewModel.notes.observeAsState(emptyList())
+    ListCompose(notes, onNoteItemClicked, onCreateClicked)
 }

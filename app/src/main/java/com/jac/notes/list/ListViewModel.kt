@@ -19,10 +19,4 @@ class ListViewModel: ViewModel() {
         _notes.value = notes
     }
 
-    fun createNote() {
-        val oldNotes = _notes.value!!.toMutableList()
-        oldNotes.add(buildNote(oldNotes.size))
-        _notes.value = oldNotes
-    }
-
 }

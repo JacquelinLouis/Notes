@@ -1,17 +1,12 @@
 package com.jac.notes
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import com.jac.notes.list.ListViewModel
-import com.jac.notes.list.ListCompose
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun MainCompose(listViewModel: ListViewModel,
-                onNoteItemClicked: (Int) -> Unit = {},
-                onCreateClicked: () -> Unit = {}) {
+fun MainCompose() {
 
-    val notes by listViewModel.notes.observeAsState(emptyList())
+    val navController = rememberNavController()
+    MainNavHost.Create(navController)
 
-    ListCompose(notes, onNoteItemClicked, onCreateClicked)
 }
