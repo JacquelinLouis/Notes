@@ -12,20 +12,19 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.jac.notes.Note
+import com.jac.notes.data.DataNote
 import com.jac.notes.ui.theme.NotesTheme
 
-private class MainComposePreviewParameterProvider: PreviewParameterProvider<List<Note>> {
-    override val values = sequenceOf(mutableListOf<Note>().apply {
-        for (i in 0 .. 5) { add(Note(i, "Title$i", "Content$i")) }
+private class MainComposePreviewParameterProvider: PreviewParameterProvider<List<DataNote>> {
+    override val values = sequenceOf(mutableListOf<DataNote>().apply {
+        for (i in 0 .. 5) { add(DataNote(i, "Title$i", "Content$i")) }
     })
 }
 
@@ -36,7 +35,7 @@ fun DefaultPreview() {
 }
 
 @Composable
-private fun NoteItem(note: Note, onClicked: (Int) -> Unit) {
+private fun NoteItem(note: DataNote, onClicked: (Int) -> Unit) {
     Column(modifier = Modifier.clickable(onClick = { onClicked(note.id) })) {
         Text(note.title)
         Text(note.content)
@@ -45,7 +44,7 @@ private fun NoteItem(note: Note, onClicked: (Int) -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun ListCompose(@PreviewParameter(MainComposePreviewParameterProvider::class) notes: List<Note>,
+fun ListCompose(@PreviewParameter(MainComposePreviewParameterProvider::class) notes: List<DataNote>,
                 onNoteItemClicked: (Int) -> Unit = {},
                 onCreateClicked: () -> Unit = {}) {
     NotesTheme {
@@ -71,6 +70,6 @@ fun ListCompose(@PreviewParameter(MainComposePreviewParameterProvider::class) no
 fun ListCompose(listViewModel: ListViewModel = viewModel(),
                 onNoteItemClicked: (Int) -> Unit = {},
                 onCreateClicked: () -> Unit = {}) {
-    val notes by listViewModel.notes.observeAsState(emptyList())
-    ListCompose(notes, onNoteItemClicked, onCreateClicked)
+    val notes = listViewModel.notes.collectAsState(emptyList())
+    ListCompose(notes.value, onNoteItemClicked, onCreateClicked)
 }

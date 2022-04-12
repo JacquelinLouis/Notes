@@ -1,22 +1,23 @@
 package com.jac.notes.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.jac.notes.Note
+import androidx.lifecycle.viewModelScope
+import com.jac.notes.data.DataNote
+import com.jac.notes.data.DataRepository
+import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class ListViewModel: ViewModel() {
+class ListViewModel: ViewModel(), KoinComponent {
 
-    private val _notes = MutableLiveData<List<Note>>()
+    private val dataRepository: DataRepository by inject()
 
-    val notes: LiveData<List<Note>> = _notes
+    val notes = dataRepository.read()
 
-    private fun buildNote(id: Int): Note = Note(id,"Title$id", "Content$id")
-
-    init {
-        val notes = mutableListOf<Note>()
-        for (i in 0 .. 5) { notes.add(buildNote(i)) }
-        _notes.value = notes
+    fun delete(note: DataNote) {
+        viewModelScope.launch {
+            dataRepository.delete(note)
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package com.jac.notes.create
+package com.jac.notes.edit
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,26 +7,32 @@ import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jac.notes.R
+import com.jac.notes.data.DataNote
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun CreateCompose(enabled: Boolean = false, onSaveClicked: () -> Unit = {}) {
+fun EditCompose(editViewModel: EditViewModel = viewModel(),
+                id: Int = DataNote.ID.NONE,
+                enabled: Boolean = false, onSaveClicked: () -> Unit = {}) {
+
+    val notes: List<DataNote> by editViewModel.read(id).collectAsState(listOf(DataNote()))
+    val note = notes.first()
 
     var titleEnabled by remember { mutableStateOf(enabled) }
-    var titleText by remember { mutableStateOf("") }
+    var titleText by remember(note.title) { mutableStateOf(note.title) }
 
     var contentEnabled by remember { mutableStateOf(enabled) }
-    var contentText by remember { mutableStateOf("") }
+    var contentText by remember(note.content) { mutableStateOf(note.content) }
 
     ConstraintLayout(Modifier.fillMaxSize()) {
 
@@ -60,7 +66,10 @@ fun CreateCompose(enabled: Boolean = false, onSaveClicked: () -> Unit = {}) {
         )
 
         Button(
-            onClick = onSaveClicked,
+            onClick = {
+                editViewModel.create(note.id, titleText, contentText)
+                onSaveClicked.invoke()
+                      },
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(saveButton) { bottom.linkTo(parent.bottom) } ) {
