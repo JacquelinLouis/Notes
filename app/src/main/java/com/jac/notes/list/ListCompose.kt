@@ -33,7 +33,7 @@ import com.jac.notes.ui.theme.NotesTheme
 
 private class MainComposePreviewParameterProvider: PreviewParameterProvider<List<DataNote>> {
     override val values = sequenceOf(mutableListOf<DataNote>().apply {
-        for (i in 0 .. 5) { add(DataNote(i, "Title$i", "Content$i")) }
+        for (i in 0 .. 5) { add(DataNote(i, "Title$i", "Content$i\nOn\nMultiple\nLines")) }
     })
 }
 
@@ -51,7 +51,7 @@ private fun NoteItem(note: DataNote, onClicked: (Int) -> Unit, onDestroyClicked:
             .weight(1F)
             .clickable(onClick = { onClicked(note.id) })) {
             Text(note.title)
-            Text(note.content)
+            Text(note.content, maxLines = 1)
 
         }
         Image(
