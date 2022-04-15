@@ -19,8 +19,6 @@ class DataRepository(context: Context) {
         else -> dao.read(id)
     }
 
-    suspend fun delete(note: DataNote) = dao.delete(note)
-
     suspend fun delete(id: Int) = dao.delete(id)
 
 }
