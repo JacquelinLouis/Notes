@@ -33,10 +33,10 @@ class MainNavHost {
                 composable(LIST) { ListCompose(
                     onNoteItemClicked = { id -> navHostController.navigate("$EDIT/$id") },
                     onCreateClicked = { navHostController.navigate(CREATE) }) }
-                composable(CREATE) { EditCompose(enabled = true, onSaveClicked = { navHostController.navigate(LIST) }) }
+                composable(CREATE) { EditCompose(enabled = true, onBackClicked = { navHostController.navigate(LIST) }) }
                 composable("$EDIT/{$ID}", arguments = listOf(navArgument(ID) { type = NavType.IntType })) { entry ->
                     val id = entry.arguments?.getInt(ID)?:0
-                    EditCompose(id = id, onSaveClicked = { navHostController.navigate(LIST) })
+                    EditCompose(id = id, onBackClicked = { navHostController.navigate(LIST) })
                 }
             }
         }

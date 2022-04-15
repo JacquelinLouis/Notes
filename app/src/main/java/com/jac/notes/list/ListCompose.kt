@@ -95,7 +95,7 @@ fun ListCompose(listViewModel: ListViewModel = viewModel(),
     val notes = listViewModel.notes.collectAsState(emptyList())
     ListCompose(notes.value, onNoteItemClicked, onCreateClicked,
         onDestroyClicked = { id ->
-            listViewModel.delete(notes.value.findLast { it.id == id }!!)
+            listViewModel.delete(id)
         }
     )
 }

@@ -21,4 +21,7 @@ interface DataNoteDao {
 
     @Delete
     suspend fun delete(note: DataNote)
+
+    @Query("DELETE FROM DataNote WHERE id = :id")
+    suspend fun delete(id: Int)
 }

@@ -14,9 +14,9 @@ class ListViewModel: ViewModel(), KoinComponent {
 
     val notes = dataRepository.read()
 
-    fun delete(note: DataNote) {
+    fun delete(id: Int) {
         viewModelScope.launch {
-            dataRepository.delete(note)
+            dataRepository.delete(id)
         }
     }
 

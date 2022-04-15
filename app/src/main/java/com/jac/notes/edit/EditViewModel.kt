@@ -19,4 +19,10 @@ class EditViewModel: ViewModel(), KoinComponent {
     }
 
     fun read(id: Int) = dataRepository.read(id)
+
+    fun delete(id: Int) {
+        viewModelScope.launch {
+            dataRepository.delete(id)
+        }
+    }
 }
