@@ -13,6 +13,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
@@ -21,8 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -68,6 +68,7 @@ private fun NoteItem(note: DataNote, onClicked: (Int) -> Unit, onDestroyClicked:
 fun ListCompose(@PreviewParameter(MainComposePreviewParameterProvider::class) notes: List<DataNote>,
                 onNoteItemClicked: (Int) -> Unit = {},
                 onCreateClicked: () -> Unit = {},
+                onSettingsClicked: () -> Unit = {},
                 onDestroyClicked: (Int) -> Unit = {}) {
     NotesTheme {
         // A surface container using the 'background' color from the theme
@@ -77,7 +78,21 @@ fun ListCompose(@PreviewParameter(MainComposePreviewParameterProvider::class) no
                     Icon(Icons.Filled.Add, contentDescription = "Create a new note")
                 }
             },
-        ) {
+            topBar = {
+                TopAppBar {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Text(stringResource(id = R.string.app_name), modifier = Modifier.weight(1F))
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_baseline_settings_24),
+                            contentDescription = "Access settings",
+                            modifier = Modifier.clickable { onSettingsClicked.invoke() }
+                        )
+                    }
+                }
+        }) {
             LazyColumn {
                 items(notes) { note ->
                     NoteItem(note, onClicked = onNoteItemClicked, onDestroyClicked)
@@ -90,10 +105,11 @@ fun ListCompose(@PreviewParameter(MainComposePreviewParameterProvider::class) no
 
 @Composable
 fun ListCompose(listViewModel: ListViewModel = viewModel(),
-                onNoteItemClicked: (Int) -> Unit = {},
-                onCreateClicked: () -> Unit = {}) {
+                onNoteItemClicked: (Int) -> Unit,
+                onCreateClicked: () -> Unit,
+                onSettingsClicked: () -> Unit) {
     val notes = listViewModel.notes.collectAsState(emptyList())
-    ListCompose(notes.value, onNoteItemClicked, onCreateClicked,
+    ListCompose(notes.value, onNoteItemClicked, onCreateClicked, onSettingsClicked,
         onDestroyClicked = { id ->
             listViewModel.delete(id)
         }

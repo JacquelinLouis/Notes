@@ -14,15 +14,15 @@ class EditViewModel: ViewModel(), KoinComponent {
 
     fun create(id: Int = DataNote.ID.DEFAULT, title: String, content: String) {
         viewModelScope.launch {
-            dataRepository.create(DataNote(id, title, content))
+            dataRepository.createNote(DataNote(id, title, content))
         }
     }
 
-    fun read(id: Int) = dataRepository.read(id)
+    fun read(id: Int) = dataRepository.readNotes(id)
 
     fun delete(id: Int) {
         viewModelScope.launch {
-            dataRepository.delete(id)
+            dataRepository.deleteNote(id)
         }
     }
 }
